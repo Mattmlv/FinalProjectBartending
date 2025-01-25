@@ -1,6 +1,5 @@
 package bartending.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class BartenderController {
     }
 
     // Get a single bartender by ID
-    @GetMapping("/{bartenderid}")
+    @GetMapping("/{bartenderId}")
     public Bartender getBartenderById(@PathVariable Long bartenderId) {
         return bartenderService.getBartenderById(bartenderId);
     }
@@ -42,14 +41,15 @@ public class BartenderController {
     }
 
     // Update an existing bartender
-    @PutMapping("/{bartenderid}")
-    public Bartender updateBartender(@PathVariable Long id, @RequestBody Bartender bartenderDetails) {
-        return bartenderService.updateBartender(id, bartenderDetails);
+    @PutMapping("/{bartenderId}")
+    public Bartender updateBartender(@PathVariable Long bartenderId, @RequestBody Bartender bartenderDetails) {
+        return bartenderService.updateBartender(bartenderId, bartenderDetails);
     }
 
     // Delete a bartender
-    @DeleteMapping("/{id}")
-    public void deleteBartender(@PathVariable Long bartenderid) {
-        bartenderService.deleteBartender(bartenderid);
+    @DeleteMapping("/{bartenderId}")
+    public void deleteBartender(@PathVariable Long bartenderId) {
+        bartenderService.deleteBartender(bartenderId);
     }
 }
+

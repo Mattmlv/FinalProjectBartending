@@ -38,7 +38,7 @@ public class IngredientService {
     }
 
     // Delete an ingredient
-    public void deleteIngredient(Long id) {
-        ingredientRepository.deleteById(id);
-    }
+   public void deleteIngredient(Long id) {
+      ingredientRepository.deleteById(id);
+   }
 }

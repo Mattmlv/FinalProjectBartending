@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class Cocktail {
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "bartender_id", nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private Bartender bartender;
 
     
@@ -44,5 +45,6 @@ public class Cocktail {
         joinColumns = @JoinColumn(name = "cocktail_id"),
         inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
+    @JsonManagedReference
     private Set<Ingredient> ingredients = new HashSet<>();
 }

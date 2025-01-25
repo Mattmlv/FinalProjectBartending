@@ -1,6 +1,5 @@
 package bartending.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +42,13 @@ public class IngredientController {
 
     // Update an existing ingredient
     @PutMapping("/{ingredientId}")
-    public Ingredient updateIngredient(@PathVariable Long id, @RequestBody Ingredient ingredientDetails) {
-        return ingredientService.updateIngredient(id, ingredientDetails);
+    public Ingredient updateIngredient(@PathVariable Long ingredientId, @RequestBody Ingredient ingredientDetails) {
+        return ingredientService.updateIngredient(ingredientId, ingredientDetails);
     }
 
     // Delete an ingredient
     @DeleteMapping("/{ingredientId}")
     public void deleteIngredient(@PathVariable Long ingredientId) {
         ingredientService.deleteIngredient(ingredientId);
-    }
+   }
 }

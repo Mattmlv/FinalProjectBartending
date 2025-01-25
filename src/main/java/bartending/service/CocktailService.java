@@ -50,10 +50,10 @@ public class CocktailService {
         return cocktailRepository.save(cocktail);
     }
 
-    // Delete a cocktail
-    public void deleteCocktail(Long id) {
-        cocktailRepository.deleteById(id);
-    }
+//    // Delete a cocktail
+//    public void deleteCocktail(Long id) {
+//        cocktailRepository.deleteById(id);
+//    }
 
 	public void addIngredientToCocktail(Long cocktailId, Long ingredientId) {
 		Cocktail cocktail = getCocktailById(cocktailId);

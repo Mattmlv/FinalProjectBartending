@@ -23,30 +23,37 @@ public class CocktailController {
     @Autowired
     private CocktailService cocktailService;
 
+    // Get all cocktails
     @GetMapping
     public List<Cocktail> getAllCocktails() {
         return cocktailService.getAllCocktails();
     }
 
+    // Create a new cocktail (associate with a bartender)
     @PostMapping("/{bartenderId}")
-    public Cocktail createCocktail(@PathVariable Long bartenderId,@RequestBody Cocktail cocktail) {
+    public Cocktail createCocktail(@PathVariable Long bartenderId, @RequestBody Cocktail cocktail) {
         return cocktailService.createCocktail(bartenderId, cocktail);
     }
 
-    @PutMapping("/{id}")
-    public Cocktail updateCocktail(@PathVariable Long id, @RequestBody Cocktail cocktail) {
-        return cocktailService.updateCocktail(id, cocktail);
+    // Update an existing cocktail
+    @PutMapping("/{cocktailId}")
+    public Cocktail updateCocktail(@PathVariable Long cocktailId, @RequestBody Cocktail cocktailDetails) {
+        return cocktailService.updateCocktail(cocktailId, cocktailDetails);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteCocktail(@PathVariable Long id) {
-        cocktailService.deleteCocktail(id);
+//    // Delete a cocktail
+//    @DeleteMapping("/{cocktailId}")
+//    public void deleteCocktail(@PathVariable Long cocktailId) {
+//        cocktailService.deleteCocktail(cocktailId);
+//    }
+
+    // Add an ingredient to a cocktail
+    @PostMapping("/{cocktailId}/ingredients/{ingredientId}")
+    public Map<String, String> addIngredientToCocktail(
+            @PathVariable Long cocktailId,
+            @PathVariable Long ingredientId) {
+        cocktailService.addIngredientToCocktail(cocktailId, ingredientId);
+        return Map.of("message", "Ingredient with ID = " + ingredientId + " has been added to cocktail with ID = " + cocktailId);
     }
-    
-    @PostMapping("/{cocktailId}/{ingredientId}")
-    public Map <String, String> addIngredientToCocktail (@PathVariable Long cocktailId, @PathVariable Long ingredientId) {
-    		cocktailService.addIngredientToCocktail(cocktailId, ingredientId);
-    		return Map.of("message", "ingredient with ID = " + ingredientId + "has been added to cocktail with ID = " + cocktailId);
-    }
-    
 }
+
