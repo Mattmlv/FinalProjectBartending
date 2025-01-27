@@ -1,12 +1,14 @@
 package bartending.service;
 
-import java.util.List;
-
+import bartending.dto.IngredientDTO;
+import bartending.entity.Ingredient;
+import bartending.exception.IngredientNotFoundException;
+import bartending.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import bartending.entity.Ingredient;
-import bartending.repository.IngredientRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class IngredientService {
@@ -15,30 +17,48 @@ public class IngredientService {
     private IngredientRepository ingredientRepository;
 
     // Get all ingredients
-    public List<Ingredient> getAllIngredients() {
-        return ingredientRepository.findAll();
+    public List<IngredientDTO> getAllIngredients() {
+        return ingredientRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     // Get a single ingredient by ID
-    public Ingredient getIngredientById(Long id) {
-        return ingredientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ingredient not found with id: " + id));
+    public IngredientDTO getIngredientById(Long id) {
+        Ingredient ingredient = ingredientRepository.findById(id)
+                .orElseThrow(() -> new IngredientNotFoundException("Ingredient not found with ID: " + id));
+        return convertToDTO(ingredient);
     }
 
     // Create a new ingredient
-    public Ingredient createIngredient(Ingredient ingredient) {
-        return ingredientRepository.save(ingredient);
+    public IngredientDTO createIngredient(Ingredient ingredient) {
+        Ingredient savedIngredient = ingredientRepository.save(ingredient);
+        return convertToDTO(savedIngredient);
     }
 
     // Update an existing ingredient
-    public Ingredient updateIngredient(Long id, Ingredient ingredientDetails) {
-        Ingredient ingredient = getIngredientById(id);
+    public IngredientDTO updateIngredient(Long id, Ingredient ingredientDetails) {
+        Ingredient ingredient = ingredientRepository.findById(id)
+                .orElseThrow(() -> new IngredientNotFoundException("Ingredient not found with ID: " + id));
         ingredient.setName(ingredientDetails.getName());
-        return ingredientRepository.save(ingredient);
+        Ingredient updatedIngredient = ingredientRepository.save(ingredient);
+        return convertToDTO(updatedIngredient);
     }
 
     // Delete an ingredient
-   public void deleteIngredient(Long id) {
-      ingredientRepository.deleteById(id);
-   }
+    public void deleteIngredient(Long id) {
+        if (!ingredientRepository.existsById(id)) {
+            throw new IngredientNotFoundException("Ingredient not found with ID: " + id);
+        }
+        ingredientRepository.deleteById(id);
+    }
+
+    // Helper method to convert Ingredient entity to DTO
+    private IngredientDTO convertToDTO(Ingredient ingredient) {
+        IngredientDTO dto = new IngredientDTO();
+        dto.setId(ingredient.getId());
+        dto.setName(ingredient.getName());
+        return dto;
+    }
 }
+

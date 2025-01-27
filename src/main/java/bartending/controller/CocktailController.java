@@ -1,20 +1,13 @@
 package bartending.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import bartending.dto.CocktailDTO;
 import bartending.entity.Cocktail;
 import bartending.service.CocktailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cocktails")
@@ -25,27 +18,33 @@ public class CocktailController {
 
     // Get all cocktails
     @GetMapping
-    public List<Cocktail> getAllCocktails() {
+    public List<CocktailDTO> getAllCocktails() {
         return cocktailService.getAllCocktails();
     }
 
-    // Create a new cocktail (associate with a bartender)
-    @PostMapping("/{bartenderId}")
-    public Cocktail createCocktail(@PathVariable Long bartenderId, @RequestBody Cocktail cocktail) {
-        return cocktailService.createCocktail(bartenderId, cocktail);
+    // Get a single cocktail by ID
+    @GetMapping("/{cocktailId}")
+    public CocktailDTO getCocktailById(@PathVariable Long cocktailId) {
+        return cocktailService.getCocktailById(cocktailId);
+    }
+
+    // Create a new cocktail
+    @PostMapping
+    public CocktailDTO createCocktail(@RequestBody Cocktail cocktail) {
+        return cocktailService.createCocktail(cocktail);
     }
 
     // Update an existing cocktail
     @PutMapping("/{cocktailId}")
-    public Cocktail updateCocktail(@PathVariable Long cocktailId, @RequestBody Cocktail cocktailDetails) {
+    public CocktailDTO updateCocktail(@PathVariable Long cocktailId, @RequestBody Cocktail cocktailDetails) {
         return cocktailService.updateCocktail(cocktailId, cocktailDetails);
     }
 
-//    // Delete a cocktail
-//    @DeleteMapping("/{cocktailId}")
-//    public void deleteCocktail(@PathVariable Long cocktailId) {
-//        cocktailService.deleteCocktail(cocktailId);
-//    }
+    // Delete a cocktail
+    @DeleteMapping("/{cocktailId}")
+    public void deleteCocktail(@PathVariable Long cocktailId) {
+        cocktailService.deleteCocktail(cocktailId);
+    }
 
     // Add an ingredient to a cocktail
     @PostMapping("/{cocktailId}/ingredients/{ingredientId}")
@@ -56,4 +55,5 @@ public class CocktailController {
         return Map.of("message", "Ingredient with ID = " + ingredientId + " has been added to cocktail with ID = " + cocktailId);
     }
 }
+
 
